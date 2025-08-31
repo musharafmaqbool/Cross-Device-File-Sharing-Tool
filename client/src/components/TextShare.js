@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+const API_BASE = process.env.REACT_APP_API_URL || '';
+
 const TextShare = () => {
   const [text, setText] = useState('');
   const [slug, setSlug] = useState('');
@@ -13,7 +15,6 @@ const TextShare = () => {
   const navigate = useNavigate();
   
   useEffect(() => {
-    // If there's a slug in the URL, fetch the text
     if (urlSlug) {
       fetchText(urlSlug);
     }
@@ -22,7 +23,7 @@ const TextShare = () => {
   const fetchText = async (textSlug) => {
     try {
       setLoading(true);
-      const res = await axios.get(`/api/text/${textSlug}`);
+      const res = await axios.get(`${API_BASE}/api/text/${textSlug}`);
       setText(res.data.content);
       setSlug(textSlug);
       setLoading(false);
@@ -44,7 +45,7 @@ const TextShare = () => {
       setLoading(true);
       setError('');
       
-      const res = await axios.post('/api/text', {
+      const res = await axios.post(`${API_BASE}/api/text`, {
         content: text,
         slug: customSlug || undefined
       });
